@@ -23,7 +23,7 @@ class vec3 {
 
     vec3 unit_vector() const {
         double mag = magnitude();
-        return vec3(points[0] / mag, points[1] / mag, points[2] / mag);
+        return {points[0] / mag, points[1] / mag, points[2] / mag};
     }
 
     vec3 &operator+=(const vec3 &a) {
@@ -33,7 +33,7 @@ class vec3 {
         return *this;
     }
 
-    vec3 &operator*=(const double lambda) {
+    vec3 operator*=(const double lambda) {
         points[0] *= lambda;
         points[1] *= lambda;
         points[2] *= lambda;
@@ -51,15 +51,15 @@ class vec3 {
 };
 
 inline vec3 operator+(const vec3 &a, const vec3 &b) {
-    return vec3(a.x() + b.x(), a.y() + b.y(), a.z() + b.z());
+    return {a.x() + b.x(), a.y() + b.y(), a.z() + b.z()};
+}
+
+inline vec3 operator-(const vec3 &a, const vec3 &b) {
+    return {a.x() - b.x(), a.y() - b.y(), a.z() - b.z()};
 }
 
 inline vec3 operator*(const vec3 &a, const double lambda) {
-    return vec3(a.x() * lambda, a.y() * lambda, a.z() * lambda);
-}
-
-inline vec3 operator*(const vec3 &a, const vec3 &b) {
-    return vec3(a.x() * b.x(), a.y() * b.y(), a.z() * b.z());
+    return {a.x() * lambda, a.y() * lambda, a.z() * lambda};
 }
 
 inline vec3 operator/(const vec3 &a, const double lambda) {
@@ -71,8 +71,8 @@ inline double dot(const vec3 &a, const vec3 &b) {
 }
 
 inline vec3 cross(const vec3 &a, const vec3 &b) {
-    return vec3(a.y() * b.z() - a.z() * b.y(), a.z() * b.x() - a.x() * b.z(),
-                a.x() * b.y() - a.y() * b.x());
+    return {a.y() * b.z() - a.z() * b.y(), a.z() * b.x() - a.x() * b.z(),
+                a.x() * b.y() - a.y() * b.x()};
 }
 
 #endif // !raytrace2_vec3_hpp

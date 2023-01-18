@@ -1,8 +1,26 @@
-//
-// Created by antoni on 1/18/23.
-//
+#ifndef raytrace2_ray_hpp
+#define raytrace2_ray_hpp
 
-#ifndef RAYTRACE2_RAY_HPP
-#define RAYTRACE2_RAY_HPP
+#include "vec3.hpp"
 
-#endif //RAYTRACE2_RAY_HPP
+class ray {
+public:
+    ray() {}
+
+    ray(vec3 origin, vec3 direction) : origin(origin), direction(direction) {}
+
+    vec3 get_direction() const {
+        return direction;
+    }
+
+    vec3 get_origin() const {
+        return origin;
+    }
+
+private:
+    vec3 origin;
+    vec3 direction;
+
+};
+
+#endif //raytrace2_ray_hpp

@@ -26,16 +26,6 @@ TEST(Vec3Test, Add) {
     EXPECT_EQ(v1, res);
 }
 
-TEST(Vec3Test, Multiply) {
-    vec3 v(1, 2, 3);
-    vec3 b(1, 2, 3);
-    vec3 bres(1, 4, 9);
-    vec3 res(2, 4, 6);
-    v *= 2;
-    EXPECT_EQ(v, res);
-    EXPECT_EQ(b * b, bres);
-}
-
 TEST(Vec3Test, DotProduct) {
     vec3 v1(1, 2, 3);
     vec3 v2(4, 5, 6);
@@ -48,3 +38,31 @@ TEST(Vec3Test, CrossProduct) {
     vec3 res(-3, 6, -3);
     EXPECT_EQ(cross(v1, v2), res);
 }
+
+TEST(Vec3Test, Equality) {
+    vec3 v1(1, 2, 3);
+    vec3 v2(1, 2, 3);
+    vec3 v3(4, 5, 6);
+    EXPECT_EQ(v1, v2);
+    EXPECT_NE(v1, v3);
+}
+
+TEST(Vec3Test, Multiplication){
+    vec3 v1(1, 2, 3);
+    vec3 res(4, 8, 12);
+    EXPECT_EQ(v1 * 4, res);
+}
+
+TEST(Vec3Test, Division){
+    vec3 v1(1, 2, 3);
+    vec3 res(0.5, 1, 1.5);
+    EXPECT_EQ(v1 / 2, res);
+}
+
+TEST(Vec3Test, Subtraction){
+    vec3 v1(1, 2, 3);
+    vec3 v2(4, 5, 6);
+    vec3 res(-3, -3, -3);
+    EXPECT_EQ(v1 - v2, res);
+}
+
