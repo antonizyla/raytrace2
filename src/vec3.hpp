@@ -56,12 +56,18 @@ class vec3 {
     double z() const { return points[2]; }
 };
 
+using colour = vec3;
+
 inline vec3 operator+(const vec3 &a, const vec3 &b) {
     return {a.x() + b.x(), a.y() + b.y(), a.z() + b.z()};
 }
 
 inline vec3 operator-(const vec3 &a, const vec3 &b) {
     return {a.x() - b.x(), a.y() - b.y(), a.z() - b.z()};
+}
+
+inline vec3 operator*(const double lambda, const vec3 &a) {
+    return {a.x() * lambda, a.y() * lambda, a.z() * lambda};
 }
 
 inline vec3 operator*(const vec3 &a, const double lambda) {
