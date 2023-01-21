@@ -19,7 +19,15 @@ class image {
         data.resize(width * height);
     }
 
-    // set pixel colours, top left is (0, 0) 
+    image() {}
+
+    void initialise(int _width, int _height) {
+        height = _height;
+        width = _width;
+        data.resize(width * height);
+    }
+
+    // set pixel colours, top left is (0, 0)
     void set_pixel(int x, int y, const uint8_t colour[3]) {
         data[y * width + x][0] = colour[0];
         data[y * width + x][1] = colour[1];

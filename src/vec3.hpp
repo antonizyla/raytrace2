@@ -2,6 +2,7 @@
 #define raytrace2_vec3_hpp
 
 #include <cmath>
+#include <iostream>
 
 class vec3 {
   private:
@@ -45,6 +46,11 @@ class vec3 {
                points[2] == a.points[2];
     }
 
+    void print() {
+        std::cout << "(" << points[0] << ", " << points[1] << ", " << points[2]
+                  << ")" << std::endl;
+    }
+
     double x() const { return points[0]; }
     double y() const { return points[1]; }
     double z() const { return points[2]; }
@@ -72,7 +78,7 @@ inline double dot(const vec3 &a, const vec3 &b) {
 
 inline vec3 cross(const vec3 &a, const vec3 &b) {
     return {a.y() * b.z() - a.z() * b.y(), a.z() * b.x() - a.x() * b.z(),
-                a.x() * b.y() - a.y() * b.x()};
+            a.x() * b.y() - a.y() * b.x()};
 }
 
 #endif // !raytrace2_vec3_hpp
