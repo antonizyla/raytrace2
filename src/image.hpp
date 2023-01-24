@@ -36,7 +36,7 @@ class image {
     }
 
     void write(const char *filename = "image.jpg") {
-        stbi_write_bmp(filename, width, height, 3, &data[0]);
+        stbi_write_jpg(filename, width, height, 3, &data[0], 90);
     }
 };
 
