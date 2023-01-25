@@ -4,6 +4,7 @@
 #include <complex>
 #include <cstdint>
 #include <iostream>
+#include <memory>
 
 #include "colour.hpp"
 #include "hittable.hpp"
@@ -13,20 +14,27 @@
 #include "utility.hpp"
 #include "vec3.hpp"
 
-inline colour rayColour(const ray &r, const hittable &environment) {
-    // auto hit_info = sphere(0.5, vec3(0, 0, -1)).hit(r, 0, infinity);
-    //  std::cout << (int)(255.99 * 0.8) << std::endl;
-    // if (hit_info.hit) {
-    //   auto normal =
-    //     vec3(r.at(hit_info.rec.lambda) - vec3(0, 0, -1)).unit_vector();
-    // return 0.5 * colour(normal.x() + 1, normal.y() + 1, normal.z() + 1);
-    // }
-    auto hit = environment.hit(r, 0, infinity);
-    if (hit.hit) {
-        auto normal = vec3(r.at(hit.rec.lambda) - vec3(0, 0, -1)).unit_vector();
-        return 0.5 * colour(normal.x() + 1, normal.y() + 1, normal.z() + 1);
+inline vec3 ray_colour(const ray &r, const hittable &environment, int depth) {
+
+    if (depth <= 0) {
+        return colour(0, 0, 0);
     }
-    return vec3(0.5, 0.5, 0.5);
+
+    auto hit = environment.hit(r, 0.001, infinity);
+    if (hit.hit) {
+        /*ray scattered;
+        colour attenuation;
+        if (hit.rec.material_ptr->scatter(r, hit.rec, attenuation, scattered)) {
+            return attenuation * ray_colour(scattered, environment, depth - 1);
+        }
+        return colour(0, 0, 0);
+        */
+        vec3 target = hit.rec.point + hit.rec.normal + random_unit_vec3();
+        return 0.5 *
+               ray_colour(ray(hit.rec.point, target), environment, depth - 1);
+    }
+
+    return -0.5 * (r.get_direction().unit_vector() + vec3(1, 1, 1));
 }
 
 class renderer {
@@ -62,7 +70,7 @@ inline void renderer::render() {
             double proportion_y = double(y) / double(img_height - 1);
             auto r = ray(vec3(0, 0, 0), top_left_corner + cam_x * proportion_x -
                                             cam_y * proportion_y - cam_origin);
-            img.set_pixel(x, y, col_to_8bit(rayColour(r, scene)));
+            img.set_pixel(x, y, col_to_8bit(ray_colour(r, scene, 50)));
         }
     }
 
@@ -80,7 +88,12 @@ inline renderer::renderer(int _width, double _fov) {
         cam_origin - cam_x / 2 + cam_y / 2 - vec3(0, 0, focal_length);
     img.initialise(img_width, img_height);
 
-    scene.add(std::make_shared<sphere>(0.5, vec3(0, 0, -1)));
+    scene.add(std::make_shared<sphere>(
+        0.5, vec3(0, 0, -1),
+        std::make_shared<lambertian>(colour(0.5, 0.5, 0.5))));
+    scene.add(std::make_shared<sphere>(
+        100, vec3(0, -100.5, -1),
+        std::make_shared<lambertian>(colour(0.5, 0.5, 0.5))));
 }
 
 #endif // raytrace2_renderer_hpp

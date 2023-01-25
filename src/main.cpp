@@ -3,7 +3,7 @@
 #include "renderer.hpp"
 
 int main() {
-    renderer r(400, 90);
+    renderer r(600, 90);
     r.render();
     return 0;
 }

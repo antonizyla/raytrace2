@@ -1,16 +1,24 @@
 #ifndef raytrace2_hittable_hpp
 #define raytrace2_hittable_hpp
+#pragma once
 
 #include "ray.hpp"
 #include <memory>
 #include <vector>
 
-enum material_type { diffuse, metal, dielectric };
+class material;
 
 struct hit_record {
     vec3 point;
     vec3 normal;
-    double lambda;
+    double lambda{};
+    bool front_face{};
+    std::shared_ptr<material> material_ptr;
+
+    inline void set_face_normal(const ray &r, vec3 &out_normal) {
+        front_face = dot(r.get_direction(), out_normal) < 0;
+        out_normal = (front_face ? out_normal : (out_normal * -1));
+    }
 };
 
 struct hit_info {

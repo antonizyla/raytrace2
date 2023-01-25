@@ -2,6 +2,7 @@
 #define raytrace2_sphere_hpp
 
 #include "hittable.hpp"
+#include "material.hpp"
 #include "ray.hpp"
 #include "utility.hpp"
 #include "vec3.hpp"
@@ -10,9 +11,11 @@ class sphere : public hittable {
   public:
     double radius;
     vec3 center;
+    std::shared_ptr<material> material_ptr;
 
   public:
-    sphere(double radius, vec3 center) : radius(radius), center(center) {}
+    sphere(double radius, vec3 center, std::shared_ptr<material> m)
+        : radius(radius), center(center), material_ptr(m) {}
 
     hit_info hit(const ray &r, const double &tmin,
                  const double &tmax) const override;
@@ -52,7 +55,9 @@ inline hit_info sphere::hit(const ray &r, const double &t_min,
     hit.rec.lambda = lambda_to_root;
     hit.rec.point = r.at(hit.rec.lambda);
     hit.rec.normal = (hit.rec.point - center) / radius;
+    hit.rec.material_ptr = material_ptr;
     hit.hit = true;
+
     return hit;
 }
 

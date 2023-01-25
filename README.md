@@ -16,3 +16,5 @@ To run:
 
 5. `./src/raytrace2_run`
 Run Executable
+
+Use `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..` substitute for step 4 if using lsp editor 

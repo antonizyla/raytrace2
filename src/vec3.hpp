@@ -1,6 +1,7 @@
 #ifndef raytrace2_vec3_hpp
 #define raytrace2_vec3_hpp
 
+#include "utility.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -51,12 +52,34 @@ class vec3 {
                   << ")" << std::endl;
     }
 
+    bool near_zero() const {
+        const double s = 1e-8;
+        return (fabs(x()) < s) && (fabs(y()) < s) && (fabs(z()) < s);
+    }
+
     double x() const { return points[0]; }
     double y() const { return points[1]; }
     double z() const { return points[2]; }
 };
 
 using colour = vec3;
+
+inline vec3 random_vec3() { return {random_d(), random_d(), random_d()}; }
+
+inline vec3 random_vec3(double min, double max) {
+    return {random_d(min, max), random_d(min, max), random_d(min, max)};
+}
+
+inline vec3 random_unit_vec3() { return random_vec3(-1, 1).unit_vector(); }
+
+inline vec3 random_unit_sphere_vec3() {
+    while (true) {
+        auto p = random_vec3(-1, 1);
+        if (p.magnitude_squared() >= 1)
+            continue;
+        return p;
+    }
+}
 
 inline vec3 operator+(const vec3 &a, const vec3 &b) {
     return {a.x() + b.x(), a.y() + b.y(), a.z() + b.z()};
@@ -87,4 +110,20 @@ inline vec3 cross(const vec3 &a, const vec3 &b) {
             a.x() * b.y() - a.y() * b.x()};
 }
 
+inline vec3 reflect(const vec3 &v, const vec3 &n) {
+    return v - 2 * dot(v, n) * n;
+}
+
+inline vec3 operator*(const vec3 &a, const vec3 &b) {
+    return {a.x() * b.x(), a.y() * b.y(), a.z() * b.z()};
+}
+
+inline vec3 random_unit_hemisphere_vec3(const vec3 &normal) {
+    vec3 in_unit_sphere = random_unit_sphere_vec3();
+    if (dot(in_unit_sphere, normal) > 0.0) {
+        return in_unit_sphere;
+    } else {
+        return in_unit_sphere * -1;
+    }
+}
 #endif // !raytrace2_vec3_hpp
